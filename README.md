@@ -9,7 +9,7 @@
 
 **Fast, Secure & Easy YouTube Video Downloader with Customizable Quality Options**
 
-[🚀 Live Demo](#) | [📖 Documentation](#installation) | [🐛 Report Bug](#contributing) | [✨ Request Feature](#contributing)
+A modern web-based YouTube downloader built with Flask that offers instant preview and lightning-fast downloads with multiple quality and format options.
 
 </div>
 
@@ -41,33 +41,12 @@
 
 ---
 
-## 🖼️ Screenshots
-
-<div align="center">
-
-### Main Interface
-![Main Interface](https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg)
-
-### Download Progress
-![Download Progress](https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg)
-
-</div>
-
----
-
-## 🚀 Quick Start
-
-### 🌐 Use Online (Recommended)
-**Just visit the live app - no installation needed!**
-
-[![Deploy to Railway](https://railway.app/button.svg)](https://railway.app/template/your-template)
-
-### 💻 Run Locally
+##  Quick Start
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/Youtube-Downloader.git
-cd Youtube-Downloader
+git clone https://github.com/aayush61203/Youtube-Downloader-Python.git
+cd Youtube-Downloader-Python
 
 # Install dependencies
 pip install -r requirements.txt
@@ -90,8 +69,8 @@ python app.py
 
 1. **Clone the Repository**
    ```bash
-   git clone https://github.com/yourusername/Youtube-Downloader.git
-   cd Youtube-Downloader
+   git clone https://github.com/aayush61203/Youtube-Downloader-Python.git
+   cd Youtube-Downloader-Python
    ```
 
 2. **Install Dependencies**
@@ -132,34 +111,6 @@ python app.py
 
 ---
 
-## 🚀 Deploy to Railway (Free Hosting)
-
-### One-Click Deployment
-
-1. **Fork this repository** to your GitHub account
-2. **Go to [Railway.app](https://railway.app)**
-3. **Click "Deploy from GitHub repo"**
-4. **Select your forked repository**
-5. **Your app is live!** 🎉
-
-### Manual Deployment
-
-```bash
-# Install Railway CLI
-npm install -g @railway/cli
-
-# Login to Railway
-railway login
-
-# Deploy your app
-railway new
-railway up
-```
-
-**Your app will be available at:** `https://your-app-name.up.railway.app`
-
----
-
 ## 🛠️ Tech Stack
 
 | Technology | Purpose | Version |
@@ -176,16 +127,13 @@ railway up
 ## 📁 Project Structure
 
 ```
-Youtube-Downloader/
+Youtube-Downloader-Python/
 ├── 📄 app.py              # Main Flask application
 ├── 📁 templates/          
 │   └── 📄 index.html      # Web interface
-├── 📁 downloads/          # Temporary file storage
+├── 📁 downloads/          # Downloaded files storage
 ├── 📄 requirements.txt    # Python dependencies
-├── 📄 Procfile           # Railway/Heroku config
-├── 📄 runtime.txt        # Python version
-├── 📄 vercel.json        # Vercel deployment
-├── 📄 app.yaml           # Google Cloud config
+├── 📄 setup.py           # Setup script
 └── 📄 README.md          # This file
 ```
 
@@ -222,22 +170,8 @@ Youtube-Downloader/
 
 ## 🤝 Contributing
 
-We love contributions! Here's how you can help:
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-### 🐛 Bug Reports
-Found a bug? Please create an issue with:
-- Clear description
-- Steps to reproduce
-- Expected vs actual behavior
-- Screenshots (if applicable)
-
-### ✨ Feature Requests
-Have an idea? We'd love to hear it!
-- Describe the feature
-- Explain why it would be useful
-- Provide mockups (if applicable)
-
-### 🔧 Pull Requests
 1. Fork the repository
 2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
 3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
@@ -303,34 +237,19 @@ Absolutely! The interface is fully responsive and works great on phones and tabl
 
 ## 📞 Support
 
-Need help? Here's how to reach us:
-
-- 📧 **Email**: [your-email@example.com](mailto:your-email@example.com)
-- 🐛 **Issues**: [GitHub Issues](https://github.com/yourusername/Youtube-Downloader/issues)
-- 💬 **Discussions**: [GitHub Discussions](https://github.com/yourusername/Youtube-Downloader/discussions)
+Need help? Create an issue in the [GitHub Issues](https://github.com/aayush61203/Youtube-Downloader-Python/issues) section.
 
 ---
 
 ## 🌟 Show Your Support
 
-If this project helped you, please consider:
-
-- ⭐ **Star this repository**
-- 🔄 **Share with friends**
-- 🐛 **Report bugs**
-- 💡 **Suggest features**
+If this project helped you, please consider giving it a ⭐ star!
 
 ---
 
 <div align="center">
 
-### 🚀 **Ready to start downloading?**
-
-[![Deploy to Railway](https://railway.app/button.svg)](https://railway.app)
-
-**Made with ❤️ by [Your Name](https://github.com/yourusername)**
-
----
+**Made with ❤️ by [aayush61203](https://github.com/aayush61203)**
 
 **⭐ Don't forget to star this repository if you found it useful! ⭐**
 
