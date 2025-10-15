@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Downloader</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        input[type="url"], select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="url"]:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+            transition: border-color 0.1s ease; /* Faster transition */
+        }
+
+        .quality-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .quality-option {
+            position: relative;
+        }
+
+        .quality-option input[type="radio"] {
+            display: none;
+        }
+
+        .quality-option label {
+            display: block;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: #f8f9fa;
+        }
+
+        .quality-option input[type="radio"]:checked + label {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .format-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .format-option {
+            position: relative;
+        }
+
+        .format-option input[type="radio"] {
+            display: none;
+        }
+
+        .format-option label {
+            display: block;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: #f8f9fa;
+            font-size: 14px;
+        }
+
+        .format-option input[type="radio"]:checked + label {
+            background: #28a745;
+            color: white;
+            border-color: #28a745;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: transform 0.3s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .progress-container {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .progress-bar {
+            background: #f0f0f0;
+            border-radius: 10px;
+            padding: 3px;
+            margin-bottom: 10px;
+        }
+
+        .progress-fill {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 20px;
+            border-radius: 8px;
+            width: 0%;
+            transition: width 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .progress-info {
+            text-align: center;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .video-info {
+            display: none;
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .video-info h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .video-details {
+            display: grid;
+            gap: 8px;
+            color: #666;
+        }
+
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .download-link {
+            display: inline-block;
+            background: #28a745;
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            margin-top: 10px;
+            transition: background 0.3s;
+        }
+
+        .download-link:hover {
+            background: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎬 YouTube Downloader</h1>
+        
+        <form id="downloadForm">
+            <div class="form-group">
+                <label for="url">YouTube URL:</label>
+                <input type="url" id="url" name="url" placeholder="https://www.youtube.com/watch?v=..." required>
+            </div>
+
+            <div id="videoInfo" class="video-info">
+                <div class="video-preview" id="videoPreview">
+                    <div id="loadingMessage" style="display: none; text-align: center; padding: 20px; color: #666; font-style: italic;">
+                        ⚡ Processing URL...
+                    </div>
+                    <img id="videoThumbnail" src="" alt="Video thumbnail" style="display: none; width: 100%; max-width: 320px; height: 180px; object-fit: cover; border-radius: 8px; margin-bottom: 15px;">
+                </div>
+                <div class="video-details" id="videoDetails">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Quality:</label>
+                <div class="quality-options">
+                    <div class="quality-option">
+                        <input type="radio" id="best" name="quality" value="best" checked>
+                        <label for="best">Best Quality</label>
+                    </div>
+                    <div class="quality-option">
+                        <input type="radio" id="1080p" name="quality" value="1080p">
+                        <label for="1080p">1080p</label>
+                    </div>
+                    <div class="quality-option">
+                        <input type="radio" id="720p" name="quality" value="720p">
+                        <label for="720p">720p</label>
+                    </div>
+                    <div class="quality-option">
+                        <input type="radio" id="480p" name="quality" value="480p">
+                        <label for="480p">480p</label>
+                    </div>
+                    <div class="quality-option">
+                        <input type="radio" id="360p" name="quality" value="360p">
+                        <label for="360p">360p</label>
+                    </div>
+                    <div class="quality-option">
+                        <input type="radio" id="audio" name="quality" value="audio">
+                        <label for="audio">Audio Only</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Format:</label>
+                <div class="format-options">
+                    <div class="format-option">
+                        <input type="radio" id="mp4" name="format" value="mp4" checked>
+                        <label for="mp4">MP4</label>
+                    </div>
+                    <div class="format-option">
+                        <input type="radio" id="webm" name="format" value="webm">
+                        <label for="webm">WebM</label>
+                    </div>
+                    <div class="format-option">
+                        <input type="radio" id="mkv" name="format" value="mkv">
+                        <label for="mkv">MKV</label>
+                    </div>
+                    <div class="format-option">
+                        <input type="radio" id="mp3" name="format" value="mp3">
+                        <label for="mp3">MP3</label>
+                    </div>
+                    <div class="format-option">
+                        <input type="radio" id="wav" name="format" value="wav">
+                        <label for="wav">WAV</label>
+                    </div>
+                    <div class="format-option">
+                        <input type="radio" id="aac" name="format" value="aac">
+                        <label for="aac">AAC</label>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn" id="downloadBtn">Download Video</button>
+        </form>
+
+        <div id="progressContainer" class="progress-container">
+            <div class="progress-info" id="progressInfo">Preparing download...</div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill">0%</div>
+            </div>
+        </div>
+
+        <div id="errorMessage" class="error-message"></div>
+        <div id="successMessage" class="success-message"></div>
+    </div>
+
+    <script>
+        let downloadId = null;
+        let progressInterval = null;
+        let videoInfoCache = {}; // Cache video info to avoid re-fetching
+
+        // Extract YouTube video ID from URL
+        function extractVideoId(url) {
+            const patterns = [
+                /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/,
+                /youtube\.com\/watch\?.*v=([a-zA-Z0-9_-]{11})/
+            ];
+            
+            for (const pattern of patterns) {
+                const match = url.match(pattern);
+                if (match) return match[1];
+            }
+            return null;
+        }
+
+        // Show instant preview with thumbnail - NO SERVER CALL NEEDED
+        function showInstantPreview(url) {
+            const videoId = extractVideoId(url);
+            if (!videoId) return;
+            
+            const videoInfo = document.getElementById('videoInfo');
+            const thumbnail = document.getElementById('videoThumbnail');
+            const videoDetails = document.getElementById('videoDetails');
+            const loadingMessage = document.getElementById('loadingMessage');
+            
+            // Show immediate thumbnail
+            const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+            thumbnail.src = thumbnailUrl;
+            thumbnail.style.display = 'block';
+            
+            // Show ready-to-download info immediately
+            videoDetails.innerHTML = `
+                <h3 style="color: #333; margin-bottom: 10px; font-size: 1.2em;">YouTube Video Ready ✅</h3>
+                <div style="color: #666; margin-bottom: 8px;"><strong>Status:</strong> Ready to download</div>
+                <div style="color: #666; margin-bottom: 8px;"><strong>Video ID:</strong> ${videoId}</div>
+                <div style="color: #666; margin-bottom: 8px;"><strong>Source:</strong> YouTube</div>
+                <div style="color: #28a745; font-weight: bold; margin-top: 10px;">✅ Click Download to start</div>
+            `;
+            
+            loadingMessage.style.display = 'none';
+            videoInfo.style.display = 'block';
+            
+            // Cache this for instant re-display
+            videoInfoCache[url] = {
+                title: 'YouTube Video (Ready)',
+                uploader: 'YouTube Channel',
+                duration: null,
+                view_count: null,
+                thumbnail: thumbnailUrl,
+                description: 'Ready to download'
+            };
+        }
+
+        // Auto-load video info when URL is pasted - NO SERVER CALLS
+        document.getElementById('url').addEventListener('paste', async function(e) {
+            setTimeout(() => {
+                const url = this.value.trim();
+                if (url && (url.includes('youtube.com') || url.includes('youtu.be'))) {
+                    showInstantPreview(url);
+                }
+            }, 10);
+        });
+
+        // Also load when URL is typed/changed - INSTANT CLIENT-SIDE ONLY
+        document.getElementById('url').addEventListener('input', function() {
+            const url = this.value.trim();
+            if (url && (url.includes('youtube.com') || url.includes('youtu.be'))) {
+                clearTimeout(this.debounceTimeout);
+                showInstantPreview(url); // Instant preview, no server call
+            } else {
+                hideVideoInfo(); // Hide preview if URL is invalid
+            }
+        });
+
+        // REMOVED - No server calls needed for preview
+        // Preview is now 100% client-side and instant
+
+        document.getElementById('downloadForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const downloadBtn = document.getElementById('downloadBtn');
+            
+            // Instant feedback
+            downloadBtn.disabled = true;
+            downloadBtn.textContent = '🚀 Starting...';
+            hideMessages();
+            showProgress();
+            updateProgress(5, 'Initializing download...');
+            
+            try {
+                const response = await fetch('/download', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (data.error) {
+                    showError(data.error);
+                    downloadBtn.disabled = false;
+                    downloadBtn.textContent = 'Download Video';
+                    hideProgress();
+                } else {
+                    downloadId = data.download_id;
+                    updateProgress(10, 'Download started successfully!');
+                    startProgressTracking();
+                }
+            } catch (error) {
+                showError('Download failed to start');
+                downloadBtn.disabled = false;
+                downloadBtn.textContent = 'Download Video';
+                hideProgress();
+            }
+        });
+
+        // Handle quality change to update format options
+        document.querySelectorAll('input[name="quality"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                const isAudio = this.value === 'audio';
+                const formatOptions = document.querySelectorAll('input[name="format"]');
+                
+                formatOptions.forEach(option => {
+                    const isAudioFormat = ['mp3', 'wav', 'aac'].includes(option.value);
+                    if (isAudio && !isAudioFormat) {
+                        option.disabled = true;
+                        option.parentElement.style.opacity = '0.5';
+                    } else if (!isAudio && isAudioFormat) {
+                        option.disabled = true;
+                        option.parentElement.style.opacity = '0.5';
+                    } else {
+                        option.disabled = false;
+                        option.parentElement.style.opacity = '1';
+                    }
+                });
+                
+                // Auto-select appropriate format
+                if (isAudio) {
+                    document.getElementById('mp3').checked = true;
+                } else {
+                    document.getElementById('mp4').checked = true;
+                }
+            });
+        });
+
+        function showVideoInfo(data) {
+            const videoInfo = document.getElementById('videoInfo');
+            const videoDetails = document.getElementById('videoDetails');
+            const thumbnail = document.getElementById('videoThumbnail');
+            const loadingMessage = document.getElementById('loadingMessage');
+            
+            // Hide loading message
+            loadingMessage.style.display = 'none';
+            
+            // Show thumbnail if available
+            if (data.thumbnail) {
+                thumbnail.src = data.thumbnail;
+                thumbnail.style.display = 'block';
+            } else {
+                thumbnail.style.display = 'none';
+            }
+            
+            videoDetails.innerHTML = `
+                <h3 style="color: #333; margin-bottom: 10px; font-size: 1.2em;">${data.title || 'YouTube Video Ready'}</h3>
+                <div style="color: #666; margin-bottom: 8px;"><strong>Status:</strong> Ready to download</div>
+                <div style="color: #666; margin-bottom: 8px;"><strong>Source:</strong> YouTube</div>
+                <div style="color: #28a745; font-weight: bold; margin-top: 10px;">✅ Select quality and format, then click Download</div>
+            `;
+            
+            videoInfo.style.display = 'block';
+        }
+
+        function showLoadingMessage() {
+            const videoInfo = document.getElementById('videoInfo');
+            const loadingMessage = document.getElementById('loadingMessage');
+            const thumbnail = document.getElementById('videoThumbnail');
+            const videoDetails = document.getElementById('videoDetails');
+            
+            // Only show loading if no instant preview is already shown
+            if (thumbnail.style.display === 'none') {
+                videoInfo.style.display = 'block';
+                loadingMessage.style.display = 'block';
+                videoDetails.innerHTML = '';
+            }
+        }
+
+        function hideVideoInfo() {
+            const videoInfo = document.getElementById('videoInfo');
+            const thumbnail = document.getElementById('videoThumbnail');
+            const loadingMessage = document.getElementById('loadingMessage');
+            
+            videoInfo.style.display = 'none';
+            thumbnail.style.display = 'none';
+            loadingMessage.style.display = 'none';
+        }
+
+        function formatDuration(seconds) {
+            if (!seconds) return 'N/A';
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return `${mins}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        function formatNumber(num) {
+            if (!num) return 'N/A';
+            return num.toLocaleString();
+        }
+
+        function showProgress() {
+            document.getElementById('progressContainer').style.display = 'block';
+        }
+
+        function hideProgress() {
+            document.getElementById('progressContainer').style.display = 'none';
+        }
+
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+        }
+
+        function showSuccess(message, downloadUrl = null) {
+            const successDiv = document.getElementById('successMessage');
+            let content = message;
+            if (downloadUrl) {
+                content += `<br><a href="${downloadUrl}" class="download-link">Download File</a>`;
+            }
+            successDiv.innerHTML = content;
+            successDiv.style.display = 'block';
+        }
+
+        function hideMessages() {
+            document.getElementById('errorMessage').style.display = 'none';
+            document.getElementById('successMessage').style.display = 'none';
+        }
+
+        function startProgressTracking() {
+            progressInterval = setInterval(async () => {
+                try {
+                    const response = await fetch(`/progress/${downloadId}`);
+                    const data = await response.json();
+                    
+                    if (data.status === 'downloading') {
+                        updateProgress(data.percent, `Downloading... ${data.percent}%`);
+                    } else if (data.status === 'finished') {
+                        updateProgress(100, 'Download completed!');
+                        clearInterval(progressInterval);
+                        resetDownloadButton();
+                        showSuccess('Download completed successfully!', `/download_file/${downloadId}`);
+                        hideProgress();
+                    } else if (data.status === 'error') {
+                        clearInterval(progressInterval);
+                        resetDownloadButton();
+                        showError(`Download failed: ${data.error}`);
+                        hideProgress();
+                    }
+                } catch (error) {
+                    console.error('Error checking progress:', error);
+                }
+            }, 500); // Faster progress updates
+        }
+
+        function updateProgress(percent, info) {
+            const progressFill = document.getElementById('progressFill');
+            const progressInfo = document.getElementById('progressInfo');
+            
+            progressFill.style.width = `${percent}%`;
+            progressFill.textContent = `${Math.round(percent)}%`;
+            progressInfo.textContent = info;
+        }
+
+        function resetDownloadButton() {
+            const downloadBtn = document.getElementById('downloadBtn');
+            downloadBtn.disabled = false;
+            downloadBtn.textContent = 'Download Video';
+        }
+    </script>
+</body>
+</html>
