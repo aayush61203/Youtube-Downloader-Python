@@ -366,7 +366,3 @@ if __name__ == '__main__':
         logging.getLogger('werkzeug').setLevel(logging.WARNING)
     
     app.run(host='0.0.0.0', port=port, debug=debug, threaded=True)
-
-# Vercel serverless entry point
-def handler(request):
-    return app(request.environ, lambda *args: None)
