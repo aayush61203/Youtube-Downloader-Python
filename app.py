@@ -186,7 +186,7 @@ def download_video(url, quality, format_ext, download_id):
         # Simple filename with download ID to avoid title extraction delays
         output_template = os.path.join(DOWNLOAD_FOLDER, f'video_{download_id}.%(ext)s')
         
-        # Ultra-fast yt-dlp options with anti-bot measures
+        # Advanced anti-bot yt-dlp options - bypass YouTube detection
         ydl_opts = {
             'outtmpl': output_template,
             'progress_hooks': [ProgressHook(download_id)],
@@ -199,31 +199,38 @@ def download_video(url, quality, format_ext, download_id):
             'writeinfojson': False,
             'writethumbnail': False,
             'extractaudio': False,
-            'concurrent_fragment_downloads': 8,  # Even more fragments
-            'http_chunk_size': 16777216,  # 16MB chunks
-            'fragment_retries': 1,  # Don't retry fragments much
-            'retries': 1,  # Don't retry downloads much
-            # Anti-bot measures
-            'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'concurrent_fragment_downloads': 4,  # Reduce to avoid detection
+            'http_chunk_size': 10485760,  # 10MB chunks (smaller)
+            'fragment_retries': 2,
+            'retries': 3,
+            # Advanced anti-bot measures
+            'user_agent': 'com.google.android.youtube/17.36.4 (Linux; U; Android 12; GB) gzip',  # YouTube Android app
             'referer': 'https://www.youtube.com/',
             'headers': {
-                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-                'Accept-Language': 'en-us,en;q=0.5',
-                'Accept-Encoding': 'gzip,deflate',
-                'Accept-Charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.7',
-                'Keep-Alive': '300',
+                'Accept': '*/*',
+                'Accept-Language': 'en-US,en;q=0.9',
+                'Accept-Encoding': 'gzip, deflate, br',
                 'Connection': 'keep-alive',
+                'Sec-Fetch-Dest': 'empty',
+                'Sec-Fetch-Mode': 'cors',
+                'Sec-Fetch-Site': 'same-origin',
+                'X-YouTube-Client-Name': '3',  # Android client
+                'X-YouTube-Client-Version': '17.36.4',
+                'Origin': 'https://www.youtube.com',
             },
-            'cookies': None,  # Don't use cookies to avoid tracking
-            'sleep_interval': 0,  # No delay between requests
-            'max_sleep_interval': 0,  # No random delay
-            # YouTube-specific extractor arguments
+            'cookies': None,
+            'sleep_interval': 1,  # Add small delay to avoid rate limiting
+            'max_sleep_interval': 3,
+            # Disable geo-bypass initially (will try in fallback)
+            'geo_bypass': False,
+            # YouTube-specific extractor arguments - prioritize mobile clients
             'extractor_args': {
                 'youtube': {
-                    'player_client': ['android', 'web'],  # Use multiple clients
-                    'player_skip': ['webpage'],  # Skip webpage parsing
-                    'comment_sort': ['top'],  # Default comment sort
-                    'max_comments': [0],  # Don't fetch comments
+                    'player_client': ['android', 'android_embedded'],  # Start with Android clients
+                    'player_skip': ['webpage', 'configs'],
+                    'comment_sort': ['top'],
+                    'max_comments': [0],
+                    'include_live_dash': False,
                 }
             },
         }
@@ -247,13 +254,103 @@ def download_video(url, quality, format_ext, download_id):
                 # Just use best available for any specific quality
                 ydl_opts['format'] = 'best'
         
-        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-            ydl.download([url])
+        # Multi-tier anti-bot approach
+        success = False
+        
+        # Tier 1: Android client (most reliable for avoiding bot detection)
+        try:
+            with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+                ydl.download([url])
+            success = True
+        except Exception as tier1_error:
+            error_str = str(tier1_error).lower()
             
+            # Tier 2: Try iOS client with different headers
+            if 'sign in' in error_str or 'bot' in error_str or 'confirm' in error_str:
+                ios_opts = ydl_opts.copy()
+                ios_opts.update({
+                    'user_agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 15_6 like Mac OS X) AppleWebKit/605.1.15',
+                    'extractor_args': {
+                        'youtube': {
+                            'player_client': ['ios', 'ios_embedded'],
+                            'player_skip': ['webpage'],
+                        }
+                    },
+                    'sleep_interval': 2,  # Slower requests
+                })
+                
+                try:
+                    with yt_dlp.YoutubeDL(ios_opts) as ydl:
+                        ydl.download([url])
+                    success = True
+                except Exception as tier2_error:
+                    
+                    # Tier 3: Try web client with full browser simulation
+                    web_opts = {
+                        'outtmpl': output_template,
+                        'progress_hooks': [ProgressHook(download_id)],
+                        'format': 'best',
+                        'quiet': True,
+                        'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
+                        'headers': {
+                            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
+                            'Accept-Language': 'en-US,en;q=0.5',
+                            'Accept-Encoding': 'gzip, deflate, br',
+                            'DNT': '1',
+                            'Connection': 'keep-alive',
+                            'Upgrade-Insecure-Requests': '1',
+                            'Sec-Fetch-Dest': 'document',
+                            'Sec-Fetch-Mode': 'navigate',
+                            'Sec-Fetch-Site': 'none',
+                            'Sec-Fetch-User': '?1',
+                        },
+                        'extractor_args': {
+                            'youtube': {
+                                'player_client': ['web'],
+                                'player_skip': ['configs'],
+                            }
+                        },
+                        'sleep_interval': 3,
+                        'fragment_retries': 5,
+                        'retries': 5,
+                    }
+                    
+                    try:
+                        with yt_dlp.YoutubeDL(web_opts) as ydl:
+                            ydl.download([url])
+                        success = True
+                    except Exception as tier3_error:
+                        
+                        # Tier 4: Last resort - try with geo-bypass and minimal detection
+                        minimal_opts = {
+                            'outtmpl': output_template,
+                            'progress_hooks': [ProgressHook(download_id)],
+                            'format': 'worst',  # Try worst quality to avoid restrictions
+                            'quiet': True,
+                            'geo_bypass': True,
+                            'geo_bypass_country': 'US',
+                            'user_agent': 'yt-dlp/2023.07.06',
+                            'sleep_interval': 5,
+                            'fragment_retries': 10,
+                            'retries': 10,
+                        }
+                        
+                        try:
+                            with yt_dlp.YoutubeDL(minimal_opts) as ydl:
+                                ydl.download([url])
+                            success = True
+                        except Exception as final_error:
+                            # All tiers failed
+                            download_progress[download_id] = {
+                                'status': 'error',
+                                'error': f"All download methods failed. YouTube may be blocking this content. Original error: {str(tier1_error)}"
+                            }
+        
     except Exception as e:
+        # Handle any completely unexpected errors
         download_progress[download_id] = {
             'status': 'error',
-            'error': str(e)
+            'error': f"Unexpected error: {str(e)}"
         }
 
 # Removed get_info route - preview is now 100% client-side for instant loading
