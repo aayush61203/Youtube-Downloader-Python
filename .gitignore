@@ -1,31 +1,173 @@
-# Python
-__pycache__/
-*.py[cod]
-*$py.class
+# Byte-compiled / optimized / DLL files# Python
+
+__pycache__/__pycache__/
+
+*.py[cod]*.py[cod]
+
+*$py.class*$py.class
+
 *.so
-.Python
-build/
+
+# C extensions.Python
+
+*.sobuild/
+
 develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-*.egg-info/
-.installed.cfg
+
+# Distribution / packagingdist/
+
+.Pythondownloads/
+
+build/eggs/
+
+develop-eggs/.eggs/
+
+dist/lib/
+
+downloads/lib64/
+
+eggs/parts/
+
+.eggs/sdist/
+
+lib/var/
+
+lib64/wheels/
+
+parts/*.egg-info/
+
+sdist/.installed.cfg
+
+var/*.egg
+
+wheels/MANIFEST
+
+pip-wheel-metadata/
+
+share/python-wheels/# Flask
+
+*.egg-info/instance/
+
+.installed.cfg.webassets-cache
+
 *.egg
-MANIFEST
 
-# Flask
-instance/
-.webassets-cache
+MANIFEST# Environment variables
 
-# Environment variables
+.env
+
+# PyInstaller.venv
+
+*.manifestenv/
+
+*.specvenv/
+
+ENV/
+
+# Installer logsenv.bak/
+
+pip-log.txtvenv.bak/
+
+pip-delete-this-directory.txt
+
+# IDE
+
+# Unit test / coverage reports.vscode/
+
+htmlcov/.idea/
+
+.tox/*.swp
+
+.nox/*.swo
+
+.coverage
+
+.coverage.*# OS
+
+.cache.DS_Store
+
+nosetests.xml.DS_Store?
+
+coverage.xml._*
+
+*.cover.Spotlight-V100
+
+*.py,cover.Trashes
+
+.hypothesis/ehthumbs.db
+
+.pytest_cache/Thumbs.db
+
+
+
+# Translations# Downloaded files (will be auto-cleaned)
+
+*.modownloads/*.mp4
+
+*.potdownloads/*.mp3
+
+downloads/*.webm
+
+# Django stuff:downloads/*.mkv
+
+*.logdownloads/*.wav
+
+local_settings.pydownloads/*.aac
+
+db.sqlite3
+
+db.sqlite3-journal# Logs
+
+*.log
+
+# Flask stuff:
+
+instance/# Database
+
+.webassets-cache*.db
+
+*.sqlite3
+
+# Scrapy stuff:
+
+.scrapy# Testing
+
+.coverage
+
+# Sphinx documentation.pytest_cache/
+
+docs/_build/.tox/
+
+
+
+# PyBuilder# Deployment
+
+target/.railway/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IPython
+profile_default/
+ipython_config.py
+
+# pyenv
+.python-version
+
+# pipenv
+Pipfile.lock
+
+# PEP 582
+__pypackages__/
+
+# Celery stuff
+celerybeat-schedule
+celerybeat.pid
+
+# SageMath parsed files
+*.sage.py
+
+# Environments
 .env
 .venv
 env/
@@ -33,14 +175,44 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+youtube_downloader_env/
 
-# IDE
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# Downloaded files
+downloads/
+*.mp4
+*.mp3
+*.wav
+*.webm
+*.mkv
+*.m4a
+*.aac
+
+# IDE specific files
 .vscode/
 .idea/
 *.swp
 *.swo
+*~
 
-# OS
+# OS specific files
 .DS_Store
 .DS_Store?
 ._*
@@ -49,25 +221,13 @@ venv.bak/
 ehthumbs.db
 Thumbs.db
 
-# Downloaded files (will be auto-cleaned)
-downloads/*.mp4
-downloads/*.mp3
-downloads/*.webm
-downloads/*.mkv
-downloads/*.wav
-downloads/*.aac
-
-# Logs
+# Log files
 *.log
 
-# Database
-*.db
-*.sqlite3
+# Temporary files
+*.tmp
+*.temp
 
-# Testing
-.coverage
-.pytest_cache/
-.tox/
-
-# Deployment
-.railway/
+# Application specific
+uploads/
+static/downloads/
