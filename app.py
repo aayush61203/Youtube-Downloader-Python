@@ -6,7 +6,8 @@ import threading
 import time
 import re
 import hashlib
-from concurrent.futures import ThreadPoolExecutor
+import signal
+from concurrent.futures import ThreadPoolExecutor, TimeoutError
 from werkzeug.utils import secure_filename
 from urllib.parse import urlparse
 
@@ -143,8 +144,19 @@ def download():
     # Generate secure download ID
     download_id = hashlib.md5(f"{url}{time.time()}{client_ip}".encode()).hexdigest()[:16]
     
-    # Start download using thread pool for better performance
-    executor.submit(download_video, url, quality, format_ext, download_id)
+    # Start download with timeout protection for free tier
+    future = executor.submit(download_video, url, quality, format_ext, download_id)
+    
+    # Set a timeout to prevent hanging on free tier (5 minutes max)
+    def timeout_handler():
+        time.sleep(300)  # 5 minutes
+        if download_id in download_progress and download_progress[download_id].get('status') not in ['finished', 'error']:
+            download_progress[download_id] = {
+                'status': 'error',
+                'error': 'Download timeout on free tier. Try a shorter video or upgrade to paid plan.'
+            }
+    
+    threading.Thread(target=timeout_handler, daemon=True).start()
     
     return jsonify({'download_id': download_id})
 
@@ -186,7 +198,7 @@ def download_video(url, quality, format_ext, download_id):
         # Simple filename with download ID to avoid title extraction delays
         output_template = os.path.join(DOWNLOAD_FOLDER, f'video_{download_id}.%(ext)s')
         
-        # Ultra-advanced anti-403 bypass options for cloud hosting
+        # Optimized for FREE TIER - minimal resource usage
         ydl_opts = {
             'outtmpl': output_template,
             'progress_hooks': [ProgressHook(download_id)],
@@ -199,167 +211,83 @@ def download_video(url, quality, format_ext, download_id):
             'writeinfojson': False,
             'writethumbnail': False,
             'extractaudio': False,
-            'concurrent_fragment_downloads': 1,  # Single thread to avoid 403
-            'http_chunk_size': 1048576,  # 1MB chunks (very small)
-            'fragment_retries': 5,
-            'retries': 5,
-            # Maximum stealth mode - avoid all API calls
-            'user_agent': 'Mozilla/5.0 (Linux; Android 11; SM-A205U) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.127 Mobile Safari/537.36',
-            'referer': 'https://m.youtube.com/',  # Mobile YouTube
+            'concurrent_fragment_downloads': 1,  # Single fragment only for low CPU
+            'http_chunk_size': 262144,  # 256KB chunks (tiny for 512MB RAM)
+            'fragment_retries': 1,  # Minimal retries to save CPU
+            'retries': 1,  # Don't waste CPU on retries
+            # Ultra-minimal for free tier - fastest possible
+            'user_agent': 'yt-dlp/2023.01.06',  # Simple user agent
+            'referer': None,  # No referer to save bandwidth
             'headers': {
-                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-                'Accept-Language': 'en-US,en;q=0.5',
-                'Accept-Encoding': 'gzip, deflate',
-                'DNT': '1',
-                'Connection': 'keep-alive',
-                'Upgrade-Insecure-Requests': '1',
-                'Cache-Control': 'max-age=0',
-                'Pragma': 'no-cache',
+                'Accept': '*/*',  # Minimal headers
+                'Connection': 'close',  # Close connections to save memory
             },
             'cookies': None,
-            'sleep_interval': 2,  # Slower to avoid detection
-            'max_sleep_interval': 5,
-            'socket_timeout': 30,
-            # Try to bypass geo and IP blocks
-            'geo_bypass': True,
-            'geo_bypass_country': 'US',
-            # Most important - use ONLY mobile client to avoid 403
+            'sleep_interval': 0,  # No delays - use all available time
+            'max_sleep_interval': 0,
+            'socket_timeout': 60,  # Longer timeout for slow free tier
+            'geo_bypass': False,  # Disable to save CPU
+            # Most minimal extraction possible
             'extractor_args': {
                 'youtube': {
-                    'player_client': ['android_testsuite'],  # Special test client
-                    'player_skip': ['webpage', 'configs', 'js'],
-                    'skip': ['hls', 'dash'],  # Skip problematic formats
-                    'comment_sort': ['top'],
-                    'max_comments': [0],
-                    'include_live_dash': False,
-                    'include_hls': False,
+                    'player_client': ['android'],  # Single simple client
+                    'player_skip': ['webpage', 'configs', 'js', 'initial_data'],
+                    'skip': ['hls', 'dash', 'live'],  # Skip everything complex
                 }
             },
+            # Force simplest formats to avoid processing overhead
+            'format_sort': ['res:480', 'ext:mp4'],  # Prefer smaller files
         }
         
-        # Super simple format selection - no complex logic
+        # FREE TIER OPTIMIZED - force small formats to avoid getting stuck
         if quality == 'audio':
-            ydl_opts['format'] = 'bestaudio'
-            if format_ext == 'mp3':
-                ydl_opts['postprocessors'] = [{
-                    'key': 'FFmpegExtractAudio',
-                    'preferredcodec': 'mp3',
-                    'preferredquality': '128',
-                }]
+            ydl_opts['format'] = 'worst[acodec!=none]'  # Smallest audio available
+            # NO post-processing on free tier - saves CPU and memory
         else:
-            # Simple format selection
+            # Always use small formats on free tier to avoid timeouts
             if quality == 'best':
-                ydl_opts['format'] = 'best'
+                ydl_opts['format'] = 'best[height<=480]/best[height<=720]/best'  # Limit resolution
             elif quality == 'worst':
                 ydl_opts['format'] = 'worst'
             else:
-                # Just use best available for any specific quality
-                ydl_opts['format'] = 'best'
+                # Force 480p or lower to ensure completion
+                ydl_opts['format'] = 'best[height<=480]/worst'
         
-        # Multi-tier 403-bypass approach for cloud hosting
+        # FREE TIER - single attempt with timeout protection
         success = False
         
-        # Tier 1: Android Test Suite client (bypass cloud IP blocks)
+        # Only one fast attempt - no time for multiple tiers on free plan
         try:
             with yt_dlp.YoutubeDL(ydl_opts) as ydl:
                 ydl.download([url])
             success = True
-        except Exception as tier1_error:
-            error_str = str(tier1_error).lower()
+        except Exception as error:
+            error_str = str(error).lower()
             
-            # Tier 2: Try different approach based on error type
-            if '403' in error_str or 'forbidden' in error_str or 'sign in' in error_str or 'bot' in error_str:
-                # Anti-403: Try with embedded client (often bypasses IP blocks)
-                embedded_opts = {
-                    'outtmpl': output_template,
-                    'progress_hooks': [ProgressHook(download_id)],
-                    'format': 'best',
-                    'quiet': True,
-                    'user_agent': 'Mozilla/5.0 (SMART-TV; Linux; Tizen 2.4.0) AppleWebKit/538.1',  # TV user agent
-                    'referer': 'https://www.youtube.com/embed/',
-                    'headers': {
-                        'Accept': '*/*',
-                        'Accept-Language': 'en-US',
-                        'Accept-Encoding': 'identity',  # No compression
-                        'Connection': 'close',  # Don't keep connections
-                    },
-                    'extractor_args': {
-                        'youtube': {
-                            'player_client': ['tv_embedded'],  # TV embedded client
-                            'player_skip': ['webpage', 'configs', 'js', 'initial_data'],
-                        }
-                    },
-                    'sleep_interval': 3,
-                    'socket_timeout': 60,
-                    'concurrent_fragment_downloads': 1,
+            # Single fast fallback - worst quality for guaranteed completion
+            minimal_opts = {
+                'outtmpl': output_template,
+                'progress_hooks': [ProgressHook(download_id)],
+                'format': 'worst',  # Guaranteed smallest file
+                'quiet': True,
+                'user_agent': 'yt-dlp/2023.01.06',
+                'concurrent_fragment_downloads': 1,
+                'http_chunk_size': 131072,  # 128KB - tiny chunks
+                'socket_timeout': 120,  # Long timeout for slow free tier
+                'fragment_retries': 0,  # No retries to save time
+                'retries': 0,
+            }
+            
+            try:
+                with yt_dlp.YoutubeDL(minimal_opts) as ydl:
+                    ydl.download([url])
+                success = True
+            except Exception as final_error:
+                # Failed completely
+                download_progress[download_id] = {
+                    'status': 'error',
+                    'error': f"Download failed on free tier. Try upgrading to paid plan for better performance. Error: {str(error)}"
                 }
-                
-                try:
-                    with yt_dlp.YoutubeDL(embedded_opts) as ydl:
-                        ydl.download([url])
-                    success = True
-                except Exception as tier2_error:
-                    
-                    # Tier 3: Try mobile web with maximum stealth
-                    stealth_opts = {
-                        'outtmpl': output_template,
-                        'progress_hooks': [ProgressHook(download_id)],
-                        'format': 'worst',  # Use worst quality to avoid restrictions
-                        'quiet': True,
-                        'no_warnings': True,
-                        'user_agent': 'Mozilla/5.0 (Linux; Android 4.4.2; Nexus 4 Build/KOT49H) AppleWebKit/537.36',
-                        'referer': 'https://m.youtube.com/',
-                        'headers': {
-                            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-                            'Accept-Language': 'en-US,en;q=0.8',
-                            'Accept-Encoding': 'identity',  # No compression to avoid detection
-                            'Cache-Control': 'no-cache',
-                            'Connection': 'close',
-                            'DNT': '1',
-                        },
-                        'extractor_args': {
-                            'youtube': {
-                                'player_client': ['mweb'],  # Mobile web client
-                                'player_skip': ['webpage', 'configs', 'js', 'initial_data', 'player'],
-                            }
-                        },
-                        'sleep_interval': 5,  # Very slow requests
-                        'fragment_retries': 10,
-                        'retries': 10,
-                        'socket_timeout': 120,
-                        'concurrent_fragment_downloads': 1,
-                    }
-                    
-                    try:
-                        with yt_dlp.YoutubeDL(stealth_opts) as ydl:
-                            ydl.download([url])
-                        success = True
-                    except Exception as tier3_error:
-                        
-                        # Tier 4: Last resort - try with geo-bypass and minimal detection
-                        minimal_opts = {
-                            'outtmpl': output_template,
-                            'progress_hooks': [ProgressHook(download_id)],
-                            'format': 'worst',  # Try worst quality to avoid restrictions
-                            'quiet': True,
-                            'geo_bypass': True,
-                            'geo_bypass_country': 'US',
-                            'user_agent': 'yt-dlp/2023.07.06',
-                            'sleep_interval': 5,
-                            'fragment_retries': 10,
-                            'retries': 10,
-                        }
-                        
-                        try:
-                            with yt_dlp.YoutubeDL(minimal_opts) as ydl:
-                                ydl.download([url])
-                            success = True
-                        except Exception as final_error:
-                            # All tiers failed
-                            download_progress[download_id] = {
-                                'status': 'error',
-                                'error': f"All download methods failed. YouTube may be blocking this content. Original error: {str(tier1_error)}"
-                            }
         
     except Exception as e:
         # Handle any completely unexpected errors
