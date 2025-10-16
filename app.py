@@ -253,10 +253,10 @@ def download_video(url, quality, format_ext, download_id):
                 # Force 480p or lower to ensure completion
                 ydl_opts['format'] = 'best[height<=480]/worst'
         
-        # FREE TIER - single attempt with timeout protection
+        # CLOUD IP BYPASS - Multiple methods for blocked hosting providers
         success = False
         
-        # Only one fast attempt - no time for multiple tiers on free plan
+        # Method 1: Standard approach with optimized settings
         try:
             with yt_dlp.YoutubeDL(ydl_opts) as ydl:
                 ydl.download([url])
@@ -264,29 +264,65 @@ def download_video(url, quality, format_ext, download_id):
         except Exception as error:
             error_str = str(error).lower()
             
-            # Single fast fallback - worst quality for guaranteed completion
-            minimal_opts = {
-                'outtmpl': output_template,
-                'progress_hooks': [ProgressHook(download_id)],
-                'format': 'worst',  # Guaranteed smallest file
-                'quiet': True,
-                'user_agent': 'yt-dlp/2023.01.06',
-                'concurrent_fragment_downloads': 1,
-                'http_chunk_size': 131072,  # 128KB - tiny chunks
-                'socket_timeout': 120,  # Long timeout for slow free tier
-                'fragment_retries': 0,  # No retries to save time
-                'retries': 0,
-            }
-            
-            try:
-                with yt_dlp.YoutubeDL(minimal_opts) as ydl:
-                    ydl.download([url])
-                success = True
-            except Exception as final_error:
-                # Failed completely
+            # Method 2: Different approach for API errors (400/403)
+            if not success and ('400' in error_str or '403' in error_str or 'bad request' in error_str or 'api' in error_str):
+                # Try embedded player bypass
+                embedded_opts = {
+                    'outtmpl': output_template,
+                    'progress_hooks': [ProgressHook(download_id)],
+                    'format': 'worst',
+                    'quiet': True,
+                    'user_agent': 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)',
+                    'headers': {
+                        'Accept': 'text/html,application/xhtml+xml',
+                        'Accept-Language': 'en-US,en;q=0.5',
+                        'Connection': 'close',
+                    },
+                    'socket_timeout': 60,
+                    'fragment_retries': 0,
+                    'retries': 0,
+                    'concurrent_fragment_downloads': 1,
+                    'http_chunk_size': 131072,
+                    'extractor_args': {
+                        'youtube': {
+                            'player_client': ['web_embedded'],
+                            'player_skip': ['webpage', 'configs', 'js', 'initial_data'],
+                        }
+                    },
+                }
+                
+                try:
+                    with yt_dlp.YoutubeDL(embedded_opts) as ydl:
+                        ydl.download([url])
+                    success = True
+                except Exception as embedded_error:
+                    # Method 3: Force generic extractor as last resort
+                    generic_opts = {
+                        'outtmpl': output_template,
+                        'progress_hooks': [ProgressHook(download_id)],
+                        'format': 'worst',
+                        'quiet': True,
+                        'user_agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36',
+                        'socket_timeout': 120,
+                        'force_generic_extractor': True,
+                        'fragment_retries': 0,
+                        'retries': 0,
+                    }
+                    
+                    try:
+                        with yt_dlp.YoutubeDL(generic_opts) as ydl:
+                            ydl.download([url])
+                        success = True
+                    except Exception as final_error:
+                        download_progress[download_id] = {
+                            'status': 'error',
+                            'error': f"Cloud hosting IP blocked by YouTube. Video unavailable on free hosting. Try: 1) Different video 2) Paid hosting plan. Error: {str(error)[:100]}"
+                        }
+            else:
+                # Non-API error
                 download_progress[download_id] = {
                     'status': 'error',
-                    'error': f"Download failed on free tier. Try upgrading to paid plan for better performance. Error: {str(error)}"
+                    'error': f"Download error: {str(error)[:100]}"
                 }
         
     except Exception as e:
