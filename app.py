@@ -7,7 +7,8 @@ import re
 import hashlib
 from concurrent.futures import ThreadPoolExecutor
 
-app = Flask(__name__)
+# PythonAnywhere fix - specify template folder path
+app = Flask(__name__, template_folder='templates')
 app.secret_key = 'youtube-downloader-pythonanywhere-2024'
 
 # PythonAnywhere Configuration
@@ -88,7 +89,15 @@ class ProgressHook:
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    try:
+        return render_template('index.html')
+    except Exception as e:
+        # Fallback if template not found
+        return f'''
+        <h1>YouTube Downloader</h1>
+        <p>Template loading issue: {str(e)}</p>
+        <p>Please upload the templates folder to PythonAnywhere</p>
+        '''
 
 @app.route('/download', methods=['POST'])
 def download():

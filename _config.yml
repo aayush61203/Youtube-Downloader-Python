@@ -1,0 +1,4 @@
+theme: jekyll-theme-minimal
+title: "YouTube Downloader - GitHub Hosted"
+description: "One-click YouTube video downloader powered by GitHub Codespaces"
+show_downloads: true
