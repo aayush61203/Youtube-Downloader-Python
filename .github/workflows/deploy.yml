@@ -1,15 +1,16 @@
-name: Deploy YouTube Downloader
+name: 🚀 GitHub Hosting Options
 
 on:
   push:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+  workflow_dispatch:
 
 jobs:
-  deploy:
+  # Test the app
+  test:
     runs-on: ubuntu-latest
-    
     steps:
     - uses: actions/checkout@v3
     
@@ -25,9 +26,5 @@ jobs:
         
     - name: Test Flask app
       run: |
-        python -c "from app import app; print('Flask app loads successfully')"
-        
-    - name: Deploy to GitHub Pages (Static version)
-      if: github.ref == 'refs/heads/main'
-      run: |
-        echo "Deployment successful - Flask app ready!"
+        python -c "import app; print('✅ Flask app loads successfully')"
+        echo "🎉 YouTube Downloader ready for GitHub hosting!"

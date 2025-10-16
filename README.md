@@ -1,67 +1,130 @@
-# 🎥 YouTube Downloader - Multiple Hosting Options
+# 🎥 YouTube Downloader - GitHub Hosted# 🎥 YouTube Downloader - Multiple Hosting Options
 
-<div align="center">
 
-## 🚀 **Choose Your Hosting Platform**
 
-[![Open in Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/aayush61203/Youtube-Downloader-Python)
-[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/4zXeRP)
-[![Run on Repl.it](https://replit.com/badge/github/aayush61203/Youtube-Downloader-Python)](https://replit.com/new/github/aayush61203/Youtube-Downloader-Python)
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/aayush61203/Youtube-Downloader-Python)<div align="center">
 
-![YouTube Downloader](https://img.shields.io/badge/YouTube-Downloader-red?style=for-the-badge&logo=youtube)
+
+
+<div align="center">## 🚀 **Choose Your Hosting Platform**
+
+
+
+![YouTube Downloader](https://img.shields.io/badge/YouTube-Downloader-red?style=for-the-badge&logo=youtube)[![Open in Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/aayush61203/Youtube-Downloader-Python)
+
+![Python](https://img.shields.io/badge/Python-3.11+-green?style=for-the-badge&logo=python)[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/4zXeRP)
+
+![GitHub](https://img.shields.io/badge/GitHub-Hosted-blue?style=for-the-badge&logo=github)[![Run on Repl.it](https://replit.com/badge/github/aayush61203/Youtube-Downloader-Python)](https://replit.com/new/github/aayush61203/Youtube-Downloader-Python)
+
+
+
+**🚀 One-Click YouTube Downloader - Hosted FREE on GitHub!**![YouTube Downloader](https://img.shields.io/badge/YouTube-Downloader-red?style=for-the-badge&logo=youtube)
+
 ![Flask](https://img.shields.io/badge/Flask-2.3.3-blue?style=for-the-badge&logo=flask)
-![Python](https://img.shields.io/badge/Python-3.11+-green?style=for-the-badge&logo=python)
+
+</div>![Python](https://img.shields.io/badge/Python-3.11+-green?style=for-the-badge&logo=python)
+
 ![Docker](https://img.shields.io/badge/Docker-Ready-blue?style=for-the-badge&logo=docker)
-
-**🎯 One-Click Deploy on 5+ Platforms - Choose What Works Best!**
-
-</div>
 
 ---
 
-## 🚀 **Instant Deployment Options**
+**🎯 One-Click Deploy on 5+ Platforms - Choose What Works Best!**
 
-| Platform | Free Tier | Setup Time | 24/7 Hosting | One-Click |
-|----------|-----------|------------|--------------|-----------|
+## 🎯 **GitHub Hosting Options**
+
+</div>
+
+### **Option 1: GitHub Codespaces (Recommended)**
+
+🟢 **FREE** - 120 hours/month included---
+
+
+
+1. **Click the button above** ☝️ ## 🚀 **Instant Deployment Options**
+
+2. **Wait 2-3 minutes** for setup
+
+3. **App starts automatically** on port 5000| Platform | Free Tier | Setup Time | 24/7 Hosting | One-Click |
+
+4. **Download YouTube videos instantly!**|----------|-----------|------------|--------------|-----------|
+
 | 🟢 **GitHub Codespaces** | 120 hrs/month | 3 minutes | ❌ | ✅ |
-| 🟢 **Railway** | $5 credit | 2 minutes | ✅ | ✅ |
-| 🟠 **Repl.it** | Limited | 1 minute | ⚠️ | ✅ |
+
+### **Option 2: GitHub Actions (24/7 Hosting)**| 🟢 **Railway** | $5 credit | 2 minutes | ✅ | ✅ |
+
+🔧 **Setup Required** - Run on your own server| 🟠 **Repl.it** | Limited | 1 minute | ⚠️ | ✅ |
+
 | 🟣 **Docker** | Depends on host | 5 minutes | ✅ | ⚠️ |
 
-### **🏆 Recommended: GitHub Codespaces**
-1. **Click Codespaces button above** ☝️
-2. **Wait 3 minutes** for auto-setup
+1. **Fork this repository**
+
+2. **Go to Settings → Actions → Runners**  ### **🏆 Recommended: GitHub Codespaces**
+
+3. **Add self-hosted runner** on your PC1. **Click Codespaces button above** ☝️
+
+4. **App runs 24/7** on your machine2. **Wait 3 minutes** for auto-setup
+
 3. **App starts automatically** on port 5000
-4. **120 hours/month FREE**
+
+### **Option 3: Local Development**4. **120 hours/month FREE**
+
+💻 **Run on your computer**
 
 ### **🏆 For 24/7 Hosting: Railway**  
-1. **Click Railway button above** ☝️
-2. **Connect your GitHub** account
-3. **Deploy automatically** 
-4. **Get permanent URL** (like `yourapp.railway.app`)
 
-### **💻 Local Development**
+```bash1. **Click Railway button above** ☝️
 
-```bash
+git clone https://github.com/aayush61203/Youtube-Downloader-Python.git2. **Connect your GitHub** account
+
+cd Youtube-Downloader-Python3. **Deploy automatically** 
+
+pip install -r requirements.txt4. **Get permanent URL** (like `yourapp.railway.app`)
+
+python app.py
+
+```### **💻 Local Development**
+
+
+
+---```bash
+
 # Clone the repository
-git clone https://github.com/aayush61203/Youtube-Downloader-Python.git
-cd Youtube-Downloader-Python
 
-# Install dependencies
-pip install -r requirements.txt
+## ✨ **Features**git clone https://github.com/aayush61203/Youtube-Downloader-Python.git
+
+- ⚡ **Instant preview** of YouTube videoscd Youtube-Downloader-Python
+
+- 🎯 **Multiple quality options** (1080p, 720p, 480p, etc.)
+
+- 🎵 **Audio extraction** (MP3, WAV, AAC)# Install dependencies
+
+- 📱 **Mobile-friendly** responsive designpip install -r requirements.txt
+
+- 🔒 **Secure** with rate limiting
 
 # Run the application
-python app.py
+
+## 🛠️ **How It Works**python app.py
+
+1. **Paste YouTube URL** in the input field```
+
+2. **Choose quality/format** from dropdown
+
+3. **Click Download** and wait for completionpip install -r requirements.txt
+
+4. **File downloads** automatically to your devicepython app.py
+
 ```
 
-pip install -r requirements.txt
-python app.py
-```
+---
 
 ## ✨ **Features**
-- ⚡ **Instant YouTube preview** 
+
+**🎉 Start using your GitHub-hosted YouTube downloader now!**- ⚡ **Instant YouTube preview** 
+
 - 🔒 **Security & rate limiting**
-- 📱 **Responsive design**
+
+**Repository:** https://github.com/aayush61203/Youtube-Downloader-Python- 📱 **Responsive design**
 - 🎯 **Multiple formats & qualities**
 - 🌍 **Geo-bypass capabilities**
 - 🚀 **Lightning-fast downloads**
