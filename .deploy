@@ -1,0 +1,7 @@
+# Deployment Trigger File
+# This file forces Vercel to redeploy
+# Created: 2025-10-17
+# Purpose: Trigger fresh deployment with cleaned serverless structure
+
+DEPLOYMENT_ID = "d9b3f36"
+STATUS = "FORCE_DEPLOY"
