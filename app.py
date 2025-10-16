@@ -16,18 +16,18 @@ app.secret_key = os.environ.get('SECRET_KEY', 'youtube-downloader-secret-key-202
 
 # Security configurations
 app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024  # 1MB max request size
-app.config['PERMANENT_SESSION_LIFETIME'] = 3600  # 1 hour sessions
+app.config['PERMANENT_SESSION_LIFETIME'] = 1800  # 30 minutes for serverless
 
-# Configuration
-DOWNLOAD_FOLDER = 'downloads'
+# Configuration for Vercel Serverless
+DOWNLOAD_FOLDER = '/tmp/downloads'  # Vercel's temp directory
 if not os.path.exists(DOWNLOAD_FOLDER):
     os.makedirs(DOWNLOAD_FOLDER)
 
 # Store download progress
 download_progress = {}
 
-# Thread pool for concurrent downloads
-executor = ThreadPoolExecutor(max_workers=3)
+# Optimized for Vercel serverless - smaller thread pool
+executor = ThreadPoolExecutor(max_workers=2)
 
 # Security: Rate limiting storage
 download_requests = {}
@@ -366,3 +366,7 @@ if __name__ == '__main__':
         logging.getLogger('werkzeug').setLevel(logging.WARNING)
     
     app.run(host='0.0.0.0', port=port, debug=debug, threaded=True)
+
+# Vercel serverless entry point
+def handler(request):
+    return app(request.environ, lambda *args: None)
