@@ -186,7 +186,7 @@ def download_video(url, quality, format_ext, download_id):
         # Simple filename with download ID to avoid title extraction delays
         output_template = os.path.join(DOWNLOAD_FOLDER, f'video_{download_id}.%(ext)s')
         
-        # Ultra-fast yt-dlp options - maximum speed
+        # Ultra-fast yt-dlp options with anti-bot measures
         ydl_opts = {
             'outtmpl': output_template,
             'progress_hooks': [ProgressHook(download_id)],
@@ -203,6 +203,29 @@ def download_video(url, quality, format_ext, download_id):
             'http_chunk_size': 16777216,  # 16MB chunks
             'fragment_retries': 1,  # Don't retry fragments much
             'retries': 1,  # Don't retry downloads much
+            # Anti-bot measures
+            'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'referer': 'https://www.youtube.com/',
+            'headers': {
+                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+                'Accept-Language': 'en-us,en;q=0.5',
+                'Accept-Encoding': 'gzip,deflate',
+                'Accept-Charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.7',
+                'Keep-Alive': '300',
+                'Connection': 'keep-alive',
+            },
+            'cookies': None,  # Don't use cookies to avoid tracking
+            'sleep_interval': 0,  # No delay between requests
+            'max_sleep_interval': 0,  # No random delay
+            # YouTube-specific extractor arguments
+            'extractor_args': {
+                'youtube': {
+                    'player_client': ['android', 'web'],  # Use multiple clients
+                    'player_skip': ['webpage'],  # Skip webpage parsing
+                    'comment_sort': ['top'],  # Default comment sort
+                    'max_comments': [0],  # Don't fetch comments
+                }
+            },
         }
         
         # Super simple format selection - no complex logic
