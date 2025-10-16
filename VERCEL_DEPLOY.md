@@ -1,5 +1,7 @@
 # 🚀 Vercel Deployment Guide
 
+<!-- Force redeploy trigger - Updated: 2025-10-17 -->
+
 ## Quick Deploy to Vercel
 
 1. **Sign up at [vercel.com](https://vercel.com)** with your GitHub account
