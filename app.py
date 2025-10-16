@@ -186,7 +186,7 @@ def download_video(url, quality, format_ext, download_id):
         # Simple filename with download ID to avoid title extraction delays
         output_template = os.path.join(DOWNLOAD_FOLDER, f'video_{download_id}.%(ext)s')
         
-        # Advanced anti-bot yt-dlp options - bypass YouTube detection
+        # Ultra-advanced anti-403 bypass options for cloud hosting
         ydl_opts = {
             'outtmpl': output_template,
             'progress_hooks': [ProgressHook(download_id)],
@@ -199,38 +199,40 @@ def download_video(url, quality, format_ext, download_id):
             'writeinfojson': False,
             'writethumbnail': False,
             'extractaudio': False,
-            'concurrent_fragment_downloads': 4,  # Reduce to avoid detection
-            'http_chunk_size': 10485760,  # 10MB chunks (smaller)
-            'fragment_retries': 2,
-            'retries': 3,
-            # Advanced anti-bot measures
-            'user_agent': 'com.google.android.youtube/17.36.4 (Linux; U; Android 12; GB) gzip',  # YouTube Android app
-            'referer': 'https://www.youtube.com/',
+            'concurrent_fragment_downloads': 1,  # Single thread to avoid 403
+            'http_chunk_size': 1048576,  # 1MB chunks (very small)
+            'fragment_retries': 5,
+            'retries': 5,
+            # Maximum stealth mode - avoid all API calls
+            'user_agent': 'Mozilla/5.0 (Linux; Android 11; SM-A205U) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.127 Mobile Safari/537.36',
+            'referer': 'https://m.youtube.com/',  # Mobile YouTube
             'headers': {
-                'Accept': '*/*',
-                'Accept-Language': 'en-US,en;q=0.9',
-                'Accept-Encoding': 'gzip, deflate, br',
+                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+                'Accept-Language': 'en-US,en;q=0.5',
+                'Accept-Encoding': 'gzip, deflate',
+                'DNT': '1',
                 'Connection': 'keep-alive',
-                'Sec-Fetch-Dest': 'empty',
-                'Sec-Fetch-Mode': 'cors',
-                'Sec-Fetch-Site': 'same-origin',
-                'X-YouTube-Client-Name': '3',  # Android client
-                'X-YouTube-Client-Version': '17.36.4',
-                'Origin': 'https://www.youtube.com',
+                'Upgrade-Insecure-Requests': '1',
+                'Cache-Control': 'max-age=0',
+                'Pragma': 'no-cache',
             },
             'cookies': None,
-            'sleep_interval': 1,  # Add small delay to avoid rate limiting
-            'max_sleep_interval': 3,
-            # Disable geo-bypass initially (will try in fallback)
-            'geo_bypass': False,
-            # YouTube-specific extractor arguments - prioritize mobile clients
+            'sleep_interval': 2,  # Slower to avoid detection
+            'max_sleep_interval': 5,
+            'socket_timeout': 30,
+            # Try to bypass geo and IP blocks
+            'geo_bypass': True,
+            'geo_bypass_country': 'US',
+            # Most important - use ONLY mobile client to avoid 403
             'extractor_args': {
                 'youtube': {
-                    'player_client': ['android', 'android_embedded'],  # Start with Android clients
-                    'player_skip': ['webpage', 'configs'],
+                    'player_client': ['android_testsuite'],  # Special test client
+                    'player_skip': ['webpage', 'configs', 'js'],
+                    'skip': ['hls', 'dash'],  # Skip problematic formats
                     'comment_sort': ['top'],
                     'max_comments': [0],
                     'include_live_dash': False,
+                    'include_hls': False,
                 }
             },
         }
@@ -254,10 +256,10 @@ def download_video(url, quality, format_ext, download_id):
                 # Just use best available for any specific quality
                 ydl_opts['format'] = 'best'
         
-        # Multi-tier anti-bot approach
+        # Multi-tier 403-bypass approach for cloud hosting
         success = False
         
-        # Tier 1: Android client (most reliable for avoiding bot detection)
+        # Tier 1: Android Test Suite client (bypass cloud IP blocks)
         try:
             with yt_dlp.YoutubeDL(ydl_opts) as ydl:
                 ydl.download([url])
@@ -265,58 +267,71 @@ def download_video(url, quality, format_ext, download_id):
         except Exception as tier1_error:
             error_str = str(tier1_error).lower()
             
-            # Tier 2: Try iOS client with different headers
-            if 'sign in' in error_str or 'bot' in error_str or 'confirm' in error_str:
-                ios_opts = ydl_opts.copy()
-                ios_opts.update({
-                    'user_agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 15_6 like Mac OS X) AppleWebKit/605.1.15',
+            # Tier 2: Try different approach based on error type
+            if '403' in error_str or 'forbidden' in error_str or 'sign in' in error_str or 'bot' in error_str:
+                # Anti-403: Try with embedded client (often bypasses IP blocks)
+                embedded_opts = {
+                    'outtmpl': output_template,
+                    'progress_hooks': [ProgressHook(download_id)],
+                    'format': 'best',
+                    'quiet': True,
+                    'user_agent': 'Mozilla/5.0 (SMART-TV; Linux; Tizen 2.4.0) AppleWebKit/538.1',  # TV user agent
+                    'referer': 'https://www.youtube.com/embed/',
+                    'headers': {
+                        'Accept': '*/*',
+                        'Accept-Language': 'en-US',
+                        'Accept-Encoding': 'identity',  # No compression
+                        'Connection': 'close',  # Don't keep connections
+                    },
                     'extractor_args': {
                         'youtube': {
-                            'player_client': ['ios', 'ios_embedded'],
-                            'player_skip': ['webpage'],
+                            'player_client': ['tv_embedded'],  # TV embedded client
+                            'player_skip': ['webpage', 'configs', 'js', 'initial_data'],
                         }
                     },
-                    'sleep_interval': 2,  # Slower requests
-                })
+                    'sleep_interval': 3,
+                    'socket_timeout': 60,
+                    'concurrent_fragment_downloads': 1,
+                }
                 
                 try:
-                    with yt_dlp.YoutubeDL(ios_opts) as ydl:
+                    with yt_dlp.YoutubeDL(embedded_opts) as ydl:
                         ydl.download([url])
                     success = True
                 except Exception as tier2_error:
                     
-                    # Tier 3: Try web client with full browser simulation
-                    web_opts = {
+                    # Tier 3: Try mobile web with maximum stealth
+                    stealth_opts = {
                         'outtmpl': output_template,
                         'progress_hooks': [ProgressHook(download_id)],
-                        'format': 'best',
+                        'format': 'worst',  # Use worst quality to avoid restrictions
                         'quiet': True,
-                        'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
+                        'no_warnings': True,
+                        'user_agent': 'Mozilla/5.0 (Linux; Android 4.4.2; Nexus 4 Build/KOT49H) AppleWebKit/537.36',
+                        'referer': 'https://m.youtube.com/',
                         'headers': {
-                            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
-                            'Accept-Language': 'en-US,en;q=0.5',
-                            'Accept-Encoding': 'gzip, deflate, br',
+                            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+                            'Accept-Language': 'en-US,en;q=0.8',
+                            'Accept-Encoding': 'identity',  # No compression to avoid detection
+                            'Cache-Control': 'no-cache',
+                            'Connection': 'close',
                             'DNT': '1',
-                            'Connection': 'keep-alive',
-                            'Upgrade-Insecure-Requests': '1',
-                            'Sec-Fetch-Dest': 'document',
-                            'Sec-Fetch-Mode': 'navigate',
-                            'Sec-Fetch-Site': 'none',
-                            'Sec-Fetch-User': '?1',
                         },
                         'extractor_args': {
                             'youtube': {
-                                'player_client': ['web'],
-                                'player_skip': ['configs'],
+                                'player_client': ['mweb'],  # Mobile web client
+                                'player_skip': ['webpage', 'configs', 'js', 'initial_data', 'player'],
                             }
                         },
-                        'sleep_interval': 3,
-                        'fragment_retries': 5,
-                        'retries': 5,
+                        'sleep_interval': 5,  # Very slow requests
+                        'fragment_retries': 10,
+                        'retries': 10,
+                        'socket_timeout': 120,
+                        'concurrent_fragment_downloads': 1,
                     }
                     
                     try:
-                        with yt_dlp.YoutubeDL(web_opts) as ydl:
+                        with yt_dlp.YoutubeDL(stealth_opts) as ydl:
                             ydl.download([url])
                         success = True
                     except Exception as tier3_error:
