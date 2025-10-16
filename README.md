@@ -1,29 +1,46 @@
-# � YouTube Downloader - GitHub Hosted
-
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/aayush61203/Youtube-Downloader-Python)
+# 🎥 YouTube Downloader - Multiple Hosting Options
 
 <div align="center">
+
+## 🚀 **Choose Your Hosting Platform**
+
+[![Open in Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/aayush61203/Youtube-Downloader-Python)
+[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/4zXeRP)
+[![Run on Repl.it](https://replit.com/badge/github/aayush61203/Youtube-Downloader-Python)](https://replit.com/new/github/aayush61203/Youtube-Downloader-Python)
 
 ![YouTube Downloader](https://img.shields.io/badge/YouTube-Downloader-red?style=for-the-badge&logo=youtube)
 ![Flask](https://img.shields.io/badge/Flask-2.3.3-blue?style=for-the-badge&logo=flask)
 ![Python](https://img.shields.io/badge/Python-3.11+-green?style=for-the-badge&logo=python)
-![GitHub Codespaces](https://img.shields.io/badge/GitHub-Codespaces-blue?style=for-the-badge&logo=github)
+![Docker](https://img.shields.io/badge/Docker-Ready-blue?style=for-the-badge&logo=docker)
 
-**One-Click YouTube Downloader - Deploy Instantly on GitHub!**
+**🎯 One-Click Deploy on 5+ Platforms - Choose What Works Best!**
 
 </div>
 
 ---
 
-## 🚀 **One-Click Deploy on GitHub**
+## 🚀 **Instant Deployment Options**
 
-### **Method 1: GitHub Codespaces (Recommended)**
-1. **Click the Codespaces button above** ☝️
-2. **Wait 2-3 minutes** for environment setup
-3. **Your app runs automatically** at `localhost:5000`
-4. **Access via forwarded port** in Codespaces
+| Platform | Free Tier | Setup Time | 24/7 Hosting | One-Click |
+|----------|-----------|------------|--------------|-----------|
+| 🟢 **GitHub Codespaces** | 120 hrs/month | 3 minutes | ❌ | ✅ |
+| 🟢 **Railway** | $5 credit | 2 minutes | ✅ | ✅ |
+| 🟠 **Repl.it** | Limited | 1 minute | ⚠️ | ✅ |
+| 🟣 **Docker** | Depends on host | 5 minutes | ✅ | ⚠️ |
 
-### **Method 2: Local Development**
+### **🏆 Recommended: GitHub Codespaces**
+1. **Click Codespaces button above** ☝️
+2. **Wait 3 minutes** for auto-setup
+3. **App starts automatically** on port 5000
+4. **120 hours/month FREE**
+
+### **🏆 For 24/7 Hosting: Railway**  
+1. **Click Railway button above** ☝️
+2. **Connect your GitHub** account
+3. **Deploy automatically** 
+4. **Get permanent URL** (like `yourapp.railway.app`)
+
+### **💻 Local Development**
 
 ```bash
 # Clone the repository
