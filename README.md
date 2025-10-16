@@ -1,4 +1,4 @@
-<div align="center"># 🎥 YouTube Downloader - GitHub Hosted# 🎥 YouTube Downloader - Multiple Hosting Options
+<div align="center"><div align="center"># 🎥 YouTube Downloader - GitHub Hosted# 🎥 YouTube Downloader - Multiple Hosting Options
 
 
 
@@ -6,7 +6,7 @@
 
 
 
-[![Python](https://img.shields.io/badge/Python-3.7+-blue.svg)](https://www.python.org/downloads/)[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/aayush61203/Youtube-Downloader-Python)<div align="center">
+[![Python](https://img.shields.io/badge/Python-3.7+-blue.svg)](https://www.python.org/downloads/)# 🎥 YouTube Video Downloader
 
 [![Flask](https://img.shields.io/badge/Flask-2.3.3-green.svg)](https://flask.palletsprojects.com/)
 
@@ -14,67 +14,359 @@
 
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-[![Code Style](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)<div align="center">## 🚀 **Choose Your Hosting Platform**
+[![Python](https://img.shields.io/badge/Python-3.7+-blue.svg)](https://www.python.org/downloads/)[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/aayush61203/Youtube-Downloader-Python)<div align="center">
 
+**A modern, fast, and user-friendly web-based YouTube video downloader**
 
+[![Flask](https://img.shields.io/badge/Flask-2.3.3-green.svg)](https://flask.palletsprojects.com/)
 
-**A modern, fast, and user-friendly web-based YouTube video downloader built with Flask and yt-dlp**
+</div>
 
+[![yt-dlp](https://img.shields.io/badge/yt--dlp-latest-red.svg)](https://github.com/yt-dlp/yt-dlp)
 
+---
 
-[Features](#-features) • [Installation](#-installation) • [Usage](#-usage) • [Screenshots](#-screenshots) • [Contributing](#-contributing)![YouTube Downloader](https://img.shields.io/badge/YouTube-Downloader-red?style=for-the-badge&logo=youtube)[![Open in Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/aayush61203/Youtube-Downloader-Python)
-
-
-
-</div>![Python](https://img.shields.io/badge/Python-3.11+-green?style=for-the-badge&logo=python)[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/4zXeRP)
-
-
-
----![GitHub](https://img.shields.io/badge/GitHub-Hosted-blue?style=for-the-badge&logo=github)[![Run on Repl.it](https://replit.com/badge/github/aayush61203/Youtube-Downloader-Python)](https://replit.com/new/github/aayush61203/Youtube-Downloader-Python)
-
-
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ## ✨ Features
 
+[![Code Style](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)<div align="center">## 🚀 **Choose Your Hosting Platform**
+
+- 🎥 **Download YouTube videos** in multiple formats (MP4, WebM, MKV)
+
+- 🎵 **Extract audio** in various formats (MP3, WAV, AAC, M4A)
+
+- 🎯 **Multiple quality options** (4K, 1080p, 720p, 480p, 360p)
+
+- 📱 **Responsive web interface** for all devices**A modern, fast, and user-friendly web-based YouTube video downloader built with Flask and yt-dlp**
+
+- ⚡ **Real-time download progress** with speed indicators
+
+- 🔒 **Secure** with input validation and rate limiting
 
 
-🎯 **Core Functionality****🚀 One-Click YouTube Downloader - Hosted FREE on GitHub!**![YouTube Downloader](https://img.shields.io/badge/YouTube-Downloader-red?style=for-the-badge&logo=youtube)
 
-- Download YouTube videos in multiple formats (MP4, WebM, MKV)
+---[Features](#-features) • [Installation](#-installation) • [Usage](#-usage) • [Screenshots](#-screenshots) • [Contributing](#-contributing)![YouTube Downloader](https://img.shields.io/badge/YouTube-Downloader-red?style=for-the-badge&logo=youtube)[![Open in Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/aayush61203/Youtube-Downloader-Python)
+
+
+
+## 🚀 Quick Start
+
+
+
+### Prerequisites</div>![Python](https://img.shields.io/badge/Python-3.11+-green?style=for-the-badge&logo=python)[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/4zXeRP)
+
+
+
+- Python 3.7 or higher
+
+- pip package manager
+
+---![GitHub](https://img.shields.io/badge/GitHub-Hosted-blue?style=for-the-badge&logo=github)[![Run on Repl.it](https://replit.com/badge/github/aayush61203/Youtube-Downloader-Python)](https://replit.com/new/github/aayush61203/Youtube-Downloader-Python)
+
+### Installation
+
+
+
+```bash
+
+# Clone the repository## ✨ Features
+
+git clone https://github.com/aayush61203/Youtube-Downloader-Python.git
+
+
+
+# Navigate to project directory
+
+cd Youtube-Downloader-Python🎯 **Core Functionality****🚀 One-Click YouTube Downloader - Hosted FREE on GitHub!**![YouTube Downloader](https://img.shields.io/badge/YouTube-Downloader-red?style=for-the-badge&logo=youtube)
+
+
+
+# Install dependencies- Download YouTube videos in multiple formats (MP4, WebM, MKV)
+
+pip install -r requirements.txt
 
 - Extract audio in various formats (MP3, WAV, AAC, M4A)![Flask](https://img.shields.io/badge/Flask-2.3.3-blue?style=for-the-badge&logo=flask)
 
-- Multiple quality options (4K, 1080p, 720p, 480p, 360p, 240p)
+# Run the application
+
+python app.py- Multiple quality options (4K, 1080p, 720p, 480p, 360p, 240p)
+
+```
 
 - Playlist and single video support</div>![Python](https://img.shields.io/badge/Python-3.11+-green?style=for-the-badge&logo=python)
 
+Open your browser and go to `http://localhost:5000`
 
+
+
+---
 
 🚀 **Performance & User Experience**![Docker](https://img.shields.io/badge/Docker-Ready-blue?style=for-the-badge&logo=docker)
 
+## 🎮 Usage
+
 - Real-time download progress with speed indicators
 
-- Instant video preview with thumbnails---
+1. **Start the application** by running `python app.py`
 
-- Responsive web interface for all devices
+2. **Open your browser** and navigate to `http://localhost:5000`- Instant video preview with thumbnails---
 
-- Concurrent downloads with thread pooling**🎯 One-Click Deploy on 5+ Platforms - Choose What Works Best!**
+3. **Paste a YouTube URL** in the input field
 
-- Smart file naming and organization
+4. **Select your preferred quality and format**- Responsive web interface for all devices
 
-## 🎯 **GitHub Hosting Options**
+5. **Click "Download"** and wait for completion
 
-🔒 **Security & Reliability**
+6. **Files are saved** in the `downloads/` folder- Concurrent downloads with thread pooling**🎯 One-Click Deploy on 5+ Platforms - Choose What Works Best!**
 
-- Rate limiting to prevent abuse</div>
 
-- Input validation and sanitization
 
-- Automatic file cleanup### **Option 1: GitHub Codespaces (Recommended)**
+### Supported URLs- Smart file naming and organization
 
-- Error handling with user-friendly messages
 
-- Cross-platform compatibility (Windows, macOS, Linux)🟢 **FREE** - 120 hours/month included---
+
+- Single videos: `https://www.youtube.com/watch?v=VIDEO_ID`## 🎯 **GitHub Hosting Options**
+
+- Playlists: `https://www.youtube.com/playlist?list=PLAYLIST_ID`
+
+- YouTube Shorts: `https://www.youtube.com/shorts/VIDEO_ID`🔒 **Security & Reliability**
+
+
+
+---- Rate limiting to prevent abuse</div>
+
+
+
+## 📁 Project Structure- Input validation and sanitization
+
+
+
+```- Automatic file cleanup### **Option 1: GitHub Codespaces (Recommended)**
+
+Youtube-Downloader-Python/
+
+├── app.py              # Main Flask application- Error handling with user-friendly messages
+
+├── templates/
+
+│   └── index.html      # Web interface- Cross-platform compatibility (Windows, macOS, Linux)🟢 **FREE** - 120 hours/month included---
+
+├── downloads/          # Downloaded files (auto-created)
+
+├── requirements.txt    # Python dependencies
+
+├── LICENSE            # MIT License
+
+└── README.md          # This file---
+
+```
+
+
+
+---
+
+## 🛠️ Installation1. **Click the button above** ☝️ ## 🚀 **Instant Deployment Options**
+
+## ⚙️ Configuration
+
+
+
+You can modify settings in `app.py`:
+
+### Prerequisites2. **Wait 2-3 minutes** for setup
+
+- **Download quality preferences**
+
+- **Rate limiting settings** 
+
+- **File naming conventions**
+
+- **Supported video formats**- **Python 3.7+** ([Download here](https://www.python.org/downloads/))3. **App starts automatically** on port 5000| Platform | Free Tier | Setup Time | 24/7 Hosting | One-Click |
+
+
+
+---- **Git** ([Download here](https://git-scm.com/downloads))
+
+
+
+## 🔧 Development4. **Download YouTube videos instantly!**|----------|-----------|------------|--------------|-----------|
+
+
+
+### Running in Development Mode### Quick Start
+
+
+
+```bash| 🟢 **GitHub Codespaces** | 120 hrs/month | 3 minutes | ❌ | ✅ |
+
+# Enable debug mode
+
+export FLASK_DEBUG=1    # Linux/macOS```bash
+
+set FLASK_DEBUG=1       # Windows
+
+# Clone the repository### **Option 2: GitHub Actions (24/7 Hosting)**| 🟢 **Railway** | $5 credit | 2 minutes | ✅ | ✅ |
+
+# Run with auto-reload
+
+python app.pygit clone https://github.com/aayush61203/Youtube-Downloader-Python.git
+
+```
+
+🔧 **Setup Required** - Run on your own server| 🟠 **Repl.it** | Limited | 1 minute | ⚠️ | ✅ |
+
+### Using Virtual Environment (Recommended)
+
+# Navigate to project directory
+
+```bash
+
+# Create virtual environmentcd Youtube-Downloader-Python| 🟣 **Docker** | Depends on host | 5 minutes | ✅ | ⚠️ |
+
+python -m venv venv
+
+
+
+# Activate virtual environment
+
+# Windows:# Install dependencies1. **Fork this repository**
+
+venv\Scripts\activate
+
+# macOS/Linux:pip install -r requirements.txt
+
+source venv/bin/activate
+
+2. **Go to Settings → Actions → Runners**  ### **🏆 Recommended: GitHub Codespaces**
+
+# Install dependencies
+
+pip install -r requirements.txt# Run the application
+
+
+
+# Run applicationpython app.py3. **Add self-hosted runner** on your PC1. **Click Codespaces button above** ☝️
+
+python app.py
+
+``````
+
+
+
+---4. **App runs 24/7** on your machine2. **Wait 3 minutes** for auto-setup
+
+
+
+## 📋 RequirementsThe application will be available at `http://localhost:5000`
+
+
+
+### Dependencies3. **App starts automatically** on port 5000
+
+
+
+- Flask==2.3.3### Alternative Installation Methods
+
+- yt-dlp==2023.10.13
+
+- Werkzeug==2.3.7### **Option 3: Local Development**4. **120 hours/month FREE**
+
+
+
+### System Requirements<details>
+
+
+
+- **RAM**: 512MB minimum, 1GB recommended<summary>📦 Using Virtual Environment (Recommended)</summary>💻 **Run on your computer**
+
+- **Storage**: 50MB for application + space for downloads
+
+- **Network**: Internet connection required
+
+
+
+---```bash### **🏆 For 24/7 Hosting: Railway**  
+
+
+
+## 🐛 Troubleshooting# Create virtual environment
+
+
+
+### Common Issuespython -m venv youtube_downloader_env```bash1. **Click Railway button above** ☝️
+
+
+
+**"Module not found" error**
+
+```bash
+
+pip install -r requirements.txt# Activate virtual environmentgit clone https://github.com/aayush61203/Youtube-Downloader-Python.git2. **Connect your GitHub** account
+
+```
+
+# On Windows:
+
+**Downloads fail with 403 error**
+
+- YouTube may have blocked the requestyoutube_downloader_env\Scripts\activatecd Youtube-Downloader-Python3. **Deploy automatically** 
+
+- Try again after a few minutes
+
+- Check if video is available in your region# On macOS/Linux:
+
+
+
+**Port 5000 already in use**source youtube_downloader_env/bin/activatepip install -r requirements.txt4. **Get permanent URL** (like `yourapp.railway.app`)
+
+```bash
+
+# Windows:
+
+netstat -ano | findstr :5000
+
+taskkill /PID <PID> /F# Install dependenciespython app.py
+
+
+
+# macOS/Linux:pip install -r requirements.txt
+
+lsof -ti:5000 | xargs kill -9
+
+``````### **💻 Local Development**
+
+
+
+---# Run application
+
+
+
+## 🤝 Contributingpython app.py
+
+
+
+1. Fork the repository```
+
+2. Create a feature branch (`git checkout -b feature/new-feature`)
+
+3. Commit your changes (`git commit -m 'Add new feature'`)---```bash
+
+4. Push to the branch (`git push origin feature/new-feature`)
+
+5. Open a Pull Request</details>
+
+
+
+---# Clone the repository
+
+
+
+## 📄 License<details>
+
+
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.<summary>🐳 Using Docker</summary>## ✨ **Features**git clone https://github.com/aayush61203/Youtube-Downloader-Python.git
 
 
 
@@ -82,135 +374,55 @@
 
 
 
-## 🛠️ Installation1. **Click the button above** ☝️ ## 🚀 **Instant Deployment Options**
+## ⚠️ Disclaimer```bash- ⚡ **Instant preview** of YouTube videoscd Youtube-Downloader-Python
 
 
 
-### Prerequisites2. **Wait 2-3 minutes** for setup
+This tool is for **educational and personal use only**. Please respect:# Build Docker image
 
 
 
-- **Python 3.7+** ([Download here](https://www.python.org/downloads/))3. **App starts automatically** on port 5000| Platform | Free Tier | Setup Time | 24/7 Hosting | One-Click |
+- YouTube's Terms of Servicedocker build -t youtube-downloader .- 🎯 **Multiple quality options** (1080p, 720p, 480p, etc.)
 
-- **Git** ([Download here](https://git-scm.com/downloads))
+- Copyright laws and intellectual property rights
 
-4. **Download YouTube videos instantly!**|----------|-----------|------------|--------------|-----------|
+- Content creators' rights
 
-### Quick Start
 
-| 🟢 **GitHub Codespaces** | 120 hrs/month | 3 minutes | ❌ | ✅ |
 
-```bash
+**We are not responsible for any misuse of this application.**# Run container- 🎵 **Audio extraction** (MP3, WAV, AAC)# Install dependencies
 
-# Clone the repository### **Option 2: GitHub Actions (24/7 Hosting)**| 🟢 **Railway** | $5 credit | 2 minutes | ✅ | ✅ |
 
-git clone https://github.com/aayush61203/Youtube-Downloader-Python.git
 
-🔧 **Setup Required** - Run on your own server| 🟠 **Repl.it** | Limited | 1 minute | ⚠️ | ✅ |
+---docker run -p 5000:5000 youtube-downloader
 
-# Navigate to project directory
 
-cd Youtube-Downloader-Python| 🟣 **Docker** | Depends on host | 5 minutes | ✅ | ⚠️ |
 
+## 🙏 Acknowledgments```- 📱 **Mobile-friendly** responsive designpip install -r requirements.txt
 
 
-# Install dependencies1. **Fork this repository**
 
-pip install -r requirements.txt
+- [yt-dlp](https://github.com/yt-dlp/yt-dlp) - YouTube downloader library
 
-2. **Go to Settings → Actions → Runners**  ### **🏆 Recommended: GitHub Codespaces**
+- [Flask](https://flask.palletsprojects.com/) - Web framework
 
-# Run the application
+- All contributors to this project</details>- 🔒 **Secure** with rate limiting
 
-python app.py3. **Add self-hosted runner** on your PC1. **Click Codespaces button above** ☝️
 
-```
 
-4. **App runs 24/7** on your machine2. **Wait 3 minutes** for auto-setup
+---
 
-The application will be available at `http://localhost:5000`
 
-3. **App starts automatically** on port 5000
 
-### Alternative Installation Methods
+<div align="center">---# Run the application
 
-### **Option 3: Local Development**4. **120 hours/month FREE**
 
-<details>
 
-<summary>📦 Using Virtual Environment (Recommended)</summary>💻 **Run on your computer**
+**Made with ❤️ for the community**
 
 
 
-```bash### **🏆 For 24/7 Hosting: Railway**  
-
-# Create virtual environment
-
-python -m venv youtube_downloader_env```bash1. **Click Railway button above** ☝️
-
-
-
-# Activate virtual environmentgit clone https://github.com/aayush61203/Youtube-Downloader-Python.git2. **Connect your GitHub** account
-
-# On Windows:
-
-youtube_downloader_env\Scripts\activatecd Youtube-Downloader-Python3. **Deploy automatically** 
-
-# On macOS/Linux:
-
-source youtube_downloader_env/bin/activatepip install -r requirements.txt4. **Get permanent URL** (like `yourapp.railway.app`)
-
-
-
-# Install dependenciespython app.py
-
-pip install -r requirements.txt
-
-```### **💻 Local Development**
-
-# Run application
-
-python app.py
-
-```
-
----```bash
-
-</details>
-
-# Clone the repository
-
-<details>
-
-<summary>🐳 Using Docker</summary>## ✨ **Features**git clone https://github.com/aayush61203/Youtube-Downloader-Python.git
-
-
-
-```bash- ⚡ **Instant preview** of YouTube videoscd Youtube-Downloader-Python
-
-# Build Docker image
-
-docker build -t youtube-downloader .- 🎯 **Multiple quality options** (1080p, 720p, 480p, etc.)
-
-
-
-# Run container- 🎵 **Audio extraction** (MP3, WAV, AAC)# Install dependencies
-
-docker run -p 5000:5000 youtube-downloader
-
-```- 📱 **Mobile-friendly** responsive designpip install -r requirements.txt
-
-
-
-</details>- 🔒 **Secure** with rate limiting
-
-
-
----# Run the application
-
-
-
-## 🎮 Usage## 🛠️ **How It Works**python app.py
+</div>## 🎮 Usage## 🛠️ **How It Works**python app.py
 
 
 
